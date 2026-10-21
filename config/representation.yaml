@@ -1,0 +1,63 @@
+model:
+  name: GlucoScope
+  version: V3
+  expected_parameter_count: 165833
+  period_len: 96
+  pin: 7
+  latent_dim: 64
+  global_pooling_hidden: 128
+  tokenizer_hidden: 64
+  glucose_min: 2.2
+  glucose_max: 27.8
+  zscore_mean: 7.0
+  zscore_std: 3.0
+  phase_layers: 2
+  phase_attn_heads: 4
+  phase_attn_dropout: 0.1
+  phase_num_routers: 8
+  phase_pos_dropout: 0.0
+  reconstruction_hidden: 128
+  reconstruction_dropout: 0.0
+  reconstruction_n_max: 16
+  tau_core: 2.0
+  tau_tail: 4.0
+  tau_extreme: 7.0
+  learnable_tau: false
+
+cohorts:
+  root: dataset/evaluation
+  include: []
+  exclude: []
+  batch_size: 512
+  min_day_count: 1.0
+  prefer_materialized: true
+  drop_invalid_samples: true
+  features:
+    large_scale: dataset/evaluation/evalution_CGM_features_10000.csv
+  wide: []
+
+holdout:
+  data_path: dataset/pretrain/agp.csv
+  remark_path: dataset/pretrain/remark.csv
+  validation_ratio: 0.1
+  split_seed: 42
+  num_examples: 20
+  metric_samples: 512
+  sample_seed: 2026
+  mask_seed: 20260723
+  mask_ratios: [0.0, 0.1, 0.2, 0.3, 0.4, 0.5]
+  batch_size: 128
+
+checkpoint_variants:
+  - name: pretraining
+    checkpoint: outputs/checkpoints/V3/pretraining/best.pth
+
+output_directory: outputs/evaluation/V3
+seed: 2026
+tsne: true
+tsne_perplexity: 50
+tsne_iterations: 1000
+tsne_min_samples: 10
+tsne_max_samples: 20000
+use_gpu: true
+gpu: 0
